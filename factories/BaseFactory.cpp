@@ -1,4 +1,5 @@
 ﻿#include "BaseFactory.h"
+#include "cocos2d.h"
 
 NAME_SPACE_DRAGON_BONES_BEGIN
 
@@ -63,6 +64,7 @@ void BaseFactory::removeDragonBonesData(const std::string &name, bool disposeDat
         }
         
         _dragonBonesDataMap.erase(iterator);
+		cocos2d::log("remove DragonBonesData name = %s", name.c_str());
     }
 }
 
@@ -105,6 +107,7 @@ void BaseFactory::removeTextureAtlas(const std::string &name, bool disposeData)
         }
         
         _textureAtlasMap.erase(iterator);
+		cocos2d::log("remove textureAtlasData name = %s",name.c_str());
     }
 }
 
@@ -217,6 +220,8 @@ Armature* BaseFactory::buildArmature(const std::string &armatureName, const std:
     skinData = armatureData->getSkinData(skinName);
     Armature *armature = generateArmature(armatureData);
     armature->name = armatureName;
+	armature->dragonBonesName = _currentDragonBonesDataName;
+	armature->textureAtlasName = _currentTextureAtlasName;
     
     if (animationArmatureData)
     {
