@@ -26,6 +26,8 @@ public:
     virtual DBCCArmatureNode* buildArmatureNode(const std::string &armatureName, const std::string &dragonBonesName) const;
     virtual DBCCArmatureNode* buildArmatureNode(const std::string &armatureName, const std::string &skinName, const std::string &animationName, const std::string &dragonBonesName, const std::string &textureAtlasName) const;
     
+	ITextureAtlas* initTextureAtlasData(const std::string& textureAtlasFile,const std::string& textureAtlasName, const char* data, size_t len);
+	DragonBonesData* initDragonBonesData(const std::string& dragonBonesName,const char* data, size_t len);
     virtual DragonBonesData* loadDragonBonesData(const std::string &dragonBonesFile, const std::string &name = "");
     virtual ITextureAtlas* loadTextureAtlas(const std::string &textureAtlasFile, const std::string &name = "");
     virtual void refreshTextureAtlasTexture(const std::string &name);
