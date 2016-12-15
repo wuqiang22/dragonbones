@@ -1,5 +1,6 @@
 #include "dbccMacro.h"
 #include "DBCCArmatureNode.h"
+#include "cache\DBCacheManager.h"
 
 
 NAME_SPACE_DRAGON_BONES_BEGIN
@@ -55,6 +56,8 @@ bool DBCCArmatureNode::initWithDBCCArmature(DBCCArmature *armature, WorldClock *
         addChild(armature->getCCDisplay());
         setCascadeOpacityEnabled(true);
         setCascadeColorEnabled(true);
+		DBCacheManager::getInstance()->retainDragonBonesData(_armature->dragonBonesName);
+		DBCacheManager::getInstance()->retainTextureAtlasData(_armature->textureAtlasName);
         return true;
     }
 
@@ -78,11 +81,16 @@ DBCCArmatureNode::~DBCCArmatureNode()
         unscheduleUpdate();
     }
 
+	
     if (_armature)
-    {
+	{
+		
+		DBCacheManager::getInstance()->releaseDragonBonesData(_armature->dragonBonesName);
+		DBCacheManager::getInstance()->releaseTextureAtlasData(_armature->textureAtlasName);
         delete _armature;
         _armature = nullptr;
     }
+	
 }
 
 cocos2d::Rect DBCCArmatureNode::getBoundingBox() const

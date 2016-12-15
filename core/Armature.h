@@ -34,6 +34,8 @@ private:
     
 public:
     std::string name;
+	std::string dragonBonesName;
+	std::string textureAtlasName;
     
     void *userData;
     

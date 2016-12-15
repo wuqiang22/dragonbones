@@ -71,6 +71,8 @@ DragonBonesData* DBCCFactory::loadDragonBonesData(const std::string &dragonBones
         return existDragonBonesData;
     }
 
+	cocos2d::log("create new dragonBonesData");
+
     const auto &data = cocos2d::FileUtils::getInstance()->getDataFromFile(dragonBonesFilePath);
     if (data.getSize() == 0)
     {
@@ -99,6 +101,8 @@ ITextureAtlas* DBCCFactory::loadTextureAtlas(const std::string &textureAtlasFile
         refreshTextureAtlasTexture(name.empty() ? existTextureAtlas->textureAtlasData->name : name);
         return existTextureAtlas;
     }
+
+	cocos2d::log("create new textureAtlasData");
 
     const auto &data = cocos2d::FileUtils::getInstance()->getDataFromFile(textureAtlasFile);
     if (data.getSize() == 0)

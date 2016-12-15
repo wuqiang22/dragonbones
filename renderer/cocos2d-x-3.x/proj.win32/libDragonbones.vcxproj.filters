@@ -31,6 +31,9 @@
     <Filter Include="dragonbones\textures">
       <UniqueIdentifier>{f37c0d71-0f78-406b-9ce7-3703598cccc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="dragonbones\cache">
+      <UniqueIdentifier>{374a5fae-72bf-4930-870c-fdce10929322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\DBCCArmature.cpp">
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="..\DBCCUtils.cpp">
       <Filter>renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\cache\DBCacheManager.cpp">
+      <Filter>dragonbones\cache</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\DBCCUtils.h">
       <Filter>renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\cache\DBCacheManager.h">
+      <Filter>dragonbones\cache</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
