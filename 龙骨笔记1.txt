@@ -1,0 +1,73 @@
+local dragonBonesName = "DragonBoy"
+local textureAtlasName = "DragonBoy"
+db.DBCCFactory:getInstance():loadDragonBonesData("dragonbones/DragonBoy/skeleton.xml", dragonBonesName);
+db.DBCCFactory:getInstance():loadTextureAtlas("dragonbones/DragonBoy/texture.xml", textureAtlasName);
+local dbArmatureNode1 = db.DBCCFactory:getInstance():buildArmatureNode("dragonBoy");
+scene:addChild(dbArmatureNode1)
+local size = cc.Director:getInstance():getWinSize()
+dbArmatureNode1:setPosition(cc.p(size.width/4,size.height/4))
+dbArmatureNode1:getAnimation():play()
+
+这可以正常显示出动画。
+
+但是
+local dragonBonesName = "DragonBoy2"
+local textureAtlasName = "DragonBoy"
+db.DBCCFactory:getInstance():loadDragonBonesData("dragonbones/DragonBoy/skeleton.xml", dragonBonesName);
+db.DBCCFactory:getInstance():loadTextureAtlas("dragonbones/DragonBoy/texture.xml", textureAtlasName);
+local dbArmatureNode1 = db.DBCCFactory:getInstance():buildArmatureNode("dragonBoy");
+scene:addChild(dbArmatureNode1)
+local size = cc.Director:getInstance():getWinSize()
+dbArmatureNode1:setPosition(cc.p(size.width/4,size.height/4))
+dbArmatureNode1:getAnimation():play()
+
+或者
+
+local dragonBonesName = "DragonBoy"
+local textureAtlasName = "DragonBoy2"
+db.DBCCFactory:getInstance():loadDragonBonesData("dragonbones/DragonBoy/skeleton.xml", dragonBonesName);
+db.DBCCFactory:getInstance():loadTextureAtlas("dragonbones/DragonBoy/texture.xml", textureAtlasName);
+local dbArmatureNode1 = db.DBCCFactory:getInstance():buildArmatureNode("dragonBoy");
+scene:addChild(dbArmatureNode1)
+local size = cc.Director:getInstance():getWinSize()
+dbArmatureNode1:setPosition(cc.p(size.width/4,size.height/4))
+dbArmatureNode1:getAnimation():play()
+
+都不能正常显示动画，这是为什么呢？
+调试发现后两者创建slot的时候的display为空：
+void *display = getTextureDisplay(displayData->name, _currentTextureAtlasName, displayData);
+
+_currentTextureAtlasName为当前搜索到有armature的纹理名字。(应该是搜索骨骼数据中有armature的骨骼名字，纹理名字默认和骨骼名字一样)
+当buildArmatureNode的参数只为一个时，会去搜索所有的骨骼数据和纹理数据。_currentTextureAtlasName就是默认等于骨骼名字。
+
+情况一：
+local dragonBonesName = "DragonBoy2"
+local textureAtlasName = "DragonBoy"
+
+骨骼数据表中有key = DragonBoy2的骨骼数据,纹理数据表中有key = DragonBoy的纹理数据
+
+搜索armatureName = "dragonBoy"时，搜索到的骨骼名字和纹理名字为_currentDragonBonesDataName = DragonBoy2,_currentTextureAtlasName = DragonBoy2。
+而纹理数据表中只有DragonBoy的纹理数据，所以得到的display为空
+
+情况二：
+local dragonBonesName = "DragonBoy"
+local textureAtlasName = "DragonBoy2"
+骨骼数据表中有key = DragonBoy的骨骼数据,纹理数据表中有key = DragonBoy2的纹理数据
+搜索armatureName = "dragonBoy"时，搜索到的骨骼名字和纹理名字为_currentDragonBonesDataName = DragonBoy,_currentTextureAtlasName = DragonBoy。
+而纹理数据表中只有DragonBoy2的纹理数据，所以得到的display为空
+
+所以如果buildArmatureNode不指定骨骼key名字和纹理key名字，那么load数据的时候dragonBonesName就要和textureAtlasName一样。
+
+如果在buildArmatureNode的时候指定骨骼key名字和纹理key名字，对dragonBonesName和textureAtlasName就没有必要要求一样了
+比如：
+local dragonBonesName = "DragonBoy"
+local textureAtlasName = "DragonBoy2"
+db.DBCCFactory:getInstance():loadDragonBonesData("dragonbones/DragonBoy/skeleton.xml", dragonBonesName);
+db.DBCCFactory:getInstance():loadTextureAtlas("dragonbones/DragonBoy/texture.xml", textureAtlasName);
+local dbArmatureNode1 = db.DBCCFactory:getInstance():buildArmatureNode("dragonBoy","","",dragonBonesName,textureAtlasName);
+scene:addChild(dbArmatureNode1)
+local size = cc.Director:getInstance():getWinSize()
+dbArmatureNode1:setPosition(cc.p(size.width/4,size.height/4))
+dbArmatureNode1:getAnimation():play()
+也是可以正常显示的。
+
