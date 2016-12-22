@@ -30,6 +30,7 @@ public:
 		std::string textureAtlasName;
 		dragonBones::DragonBonesData* dragonBonesData;
 		dragonBones::ITextureAtlas* texureAtlasData;
+		cocos2d::Texture2D* texture;
 		std::vector<ARMATURENODE_FUNC> callbacks;
 		std::vector<std::string> armatureNames;
 		bool isValid;
@@ -51,6 +52,12 @@ public:
 private:
 	dragonBones::DBCCArmatureNode* generateArmatureNode(AsyncStruct* asyncStruct,const std::string& armatureName);
 	void tryGenerateArmatureNode();
+	void notifyLoadDragonBonesDataFail(const std::string& dragonBonesName);
+	void notifyLoadTextureAtlasDataFail(const std::string& textureAtlasName);
+
+	void setDragonBonesData(const std::string& dragonBonesName, dragonBones::DragonBonesData* data);
+	void setTextureAtlasData(const std::string& textureAtlasName, dragonBones::ITextureAtlas* data);
+	void setTexture2d(const std::string& textureAtlasName, cocos2d::Texture2D* texture);
 private:
 	static DragonBonesAsyncUtil* instance;
 
